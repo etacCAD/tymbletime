@@ -6,3 +6,4 @@ reviews/
 COACHING_FRAMEWORK.md
 .claude/
 .DS_Store
+node_modules/

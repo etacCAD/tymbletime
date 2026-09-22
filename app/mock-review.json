@@ -1,0 +1,52 @@
+{
+  "is_gymnastics": true,
+  "skill_summary": "Round-off → Back Handspring → Rebound",
+  "event": "Floor",
+  "level_guess": "Xcel Silver/Gold or Level 3–5 (estimated)",
+  "camera_notes": "Filmed from far away in low light, so toe point and exact knee angles are estimates. Next time, film side-on, closer, at her height.",
+  "overall_headline": "You are SO close, superstar! ✨",
+  "overall_message": "You go for the whole pass with no hesitation, every flip finishes, and your last landing is clean. The points you're losing come from body shape, not fear or rotation.",
+  "wins": [
+    {"emoji": "💪", "title": "Fearless attack", "detail": "No hesitation before the round-off."},
+    {"emoji": "🙌", "title": "Textbook hurdle", "detail": "Arms go right up by your ears."},
+    {"emoji": "🎀", "title": "Clean finish", "detail": "Feet together, no extra steps, arms up and held."}
+  ],
+  "top_fix": {
+    "cue": "Snap and Stand",
+    "problem": "Right after your round-off you land folded over with your chest down, so you have to sit back into the back handspring.",
+    "goal": "End the round-off with feet together, chest up and arms by your ears, so the handspring starts from a bounce.",
+    "drills": [
+      {"name": "Round-off rebound", "how": "Round-off, then a straight jump with arms up, then stick it on a panel mat. 5–10 reps."},
+      {"name": "Handstand snap-downs", "how": "From a handstand against a wall or off a block, snap both feet down together and bounce. 3 sets of 5."}
+    ]
+  },
+  "next_fix": "Straight knees in the back handspring.",
+  "scores": [
+    {"dimension": "Body Lines & Shape", "score": 5, "note": "Bent knees and legs apart in the round-off and back handspring"},
+    {"dimension": "Tightness & Core", "score": 5, "note": "Folds at the hips coming out of both skills"},
+    {"dimension": "Amplitude & Extension", "score": 4, "note": "Back handspring stays low, small rebound"},
+    {"dimension": "Power & Takeoff", "score": 5, "note": "Great hurdle; the round-off loses speed"},
+    {"dimension": "Rotation & Air Awareness", "score": 7, "note": "Every flip finishes"},
+    {"dimension": "Landing Control", "score": 7, "note": "Final landing stuck"},
+    {"dimension": "Rhythm, Flow & Connections", "score": 7, "note": "Skills connect"},
+    {"dimension": "Artistry, Confidence & Composure", "score": 7, "note": "Commits fully"}
+  ],
+  "timeline": [
+    {"time_s": 3.0, "phase": "Hurdle", "note": "Arms up by the ears"},
+    {"time_s": 3.8, "phase": "Round-off", "note": "Legs apart, knees bent"},
+    {"time_s": 4.6, "phase": "Back handspring", "note": "Knees bent about 90°"},
+    {"time_s": 5.4, "phase": "Rebound", "note": "Feet together, toes pointed"}
+  ],
+  "key_frames": [
+    {"frame_index": 7, "title": "Round-off", "caption": "Legs apart and knees bent."},
+    {"frame_index": 10, "title": "Round-off landing", "caption": "Folded over with chest down. The #1 fix."},
+    {"frame_index": 14, "title": "Back handspring", "caption": "Nice arch, but knees bend."},
+    {"frame_index": 20, "title": "Rebound", "caption": "Feet together and toes pointed ✅"}
+  ],
+  "deductions": [
+    {"item": "Round-off: legs apart / bent", "amount": "0.1–0.2"},
+    {"item": "Back handspring: bent knees", "amount": "0.3"},
+    {"item": "Chest-down landings", "amount": "0.1–0.2"}
+  ],
+  "deduction_total": "0.5–0.7"
+}

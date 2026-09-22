@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: tymbletime
+    runtime: node
+    plan: free
+    rootDir: app
+    buildCommand: npm ci
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      # Set these in the Render dashboard so they never live in git.
+      - key: SITE_PASSWORD
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Render generates this; it signs the login cookie.
+      - key: SESSION_SECRET
+        generateValue: true
+      # Max reviews per day, a cost safety net.
+      - key: DAILY_LIMIT
+        value: "40"

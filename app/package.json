@@ -1,0 +1,18 @@
+{
+  "name": "tymbletime-coach",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Password-gated gymnastics video coach",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "TT_MOCK=1 node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0"
+  }
+}

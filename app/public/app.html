@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>TymbleTime Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'%3E%3Cpath d='M32 20C22 6 6 2 4 10s2 22 10 24 14-6 18-14z' fill='%23ff3d9a' stroke='%23000' stroke-width='3'/%3E%3Cpath d='M32 20C42 6 58 2 60 10s-2 22-10 24-14-6-18-14z' fill='%23ff3d9a' stroke='%23000' stroke-width='3'/%3E%3Ccircle cx='32' cy='20' r='7' fill='%23ff85c0' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --pink: #ff3d9a; --pink-soft: #ff85c0; --blush: #ffd6ea;
+    --ink: #0b0b0d; --ink-2: #17151a; --ink-3: #242027;
+    --text: #fff5fa; --muted: #d9b8c9; --line: #000;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background-color: var(--ink);
+    background-image: radial-gradient(rgba(255, 61, 154, .16) 2.5px, transparent 3px);
+    background-size: 28px 28px;
+    color: var(--text); font-family: "Fredoka", ui-rounded, "Segoe UI", system-ui, sans-serif;
+    line-height: 1.5; min-height: 100vh;
+  }
+  svg.sym { position: absolute; width: 0; height: 0; }
+  b { font-weight: 600; }
+  [hidden] { display: none !important; }
+  main { max-width: 980px; margin: 0 auto; padding: 20px 16px 64px; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 700; color: var(--text); text-decoration: none; background: none; border: 0; cursor: pointer; font-family: inherit; padding: 0; }
+  .brand svg { width: 52px; height: 33px; }
+  .brand .word span { color: var(--pink); }
+  .topbar a.out { color: var(--muted); font-size: 14px; }
+
+  .card { background: var(--ink-2); border: 3px solid var(--line); border-radius: 22px; box-shadow: 6px 6px 0 var(--pink); padding: 20px; }
+  .btn {
+    font: inherit; font-size: 18px; font-weight: 600; padding: 14px 22px; cursor: pointer; border-radius: 999px;
+    border: 3px solid var(--line); background: var(--pink); color: var(--ink); box-shadow: 4px 4px 0 var(--pink-soft);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;
+  }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--pink-soft); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.ghost { background: var(--ink); color: var(--pink); border-color: var(--pink); box-shadow: 4px 4px 0 var(--pink); }
+
+  /* ---------- Upload ---------- */
+  .intro h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.08; margin: 0 0 8px; }
+  .intro h1 span { color: var(--pink); }
+  .intro p { color: var(--muted); margin: 0 0 24px; max-width: 620px; }
+  .drop {
+    display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; cursor: pointer;
+    border: 3px dashed var(--pink); border-radius: 22px; padding: 36px 16px; background: rgba(255, 61, 154, .06);
+  }
+  .drop:hover { background: rgba(255, 61, 154, .12); }
+  .drop .big { font-size: 44px; }
+  .drop b { font-size: 20px; }
+  .drop small { color: var(--muted); }
+  .drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .step { margin-top: 24px; }
+  .step h2 { font-size: 20px; margin: 0 0 4px; display: flex; gap: 8px; align-items: center; }
+  .step .hint { color: var(--muted); margin: 0 0 14px; font-size: 15px; }
+  .num { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--pink); color: var(--ink); font-size: 16px; flex: none; }
+  video.preview { width: 100%; max-height: 420px; background: #000; border-radius: 16px; border: 2px solid var(--line); display: block; }
+  .trim { display: grid; gap: 14px; margin-top: 14px; }
+  .trim label { display: grid; grid-template-columns: 70px 1fr 64px; align-items: center; gap: 12px; font-weight: 600; }
+  .trim output { color: var(--pink); text-align: right; font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--pink); }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fields label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 15px; }
+  .fields .full { grid-column: 1 / -1; }
+  .fields input, .fields select, .fields textarea {
+    font: inherit; font-weight: 400; font-size: 16px; padding: 11px 14px; border-radius: 14px;
+    border: 2px solid var(--ink-3); background: var(--ink); color: var(--text); outline: none; width: 100%;
+  }
+  .fields textarea { resize: vertical; min-height: 64px; }
+  .fields input:focus, .fields select:focus, .fields textarea:focus { border-color: var(--pink); }
+  .seg { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg label { flex: 1; min-width: 90px; }
+  .seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .seg span {
+    display: block; text-align: center; padding: 10px 12px; border-radius: 999px; border: 2px solid var(--ink-3);
+    background: var(--ink); cursor: pointer; font-weight: 500;
+  }
+  .seg input:checked + span { background: var(--pink); color: var(--ink); border-color: var(--line); }
+  .seg input:focus-visible + span { outline: 3px solid var(--pink-soft); outline-offset: 2px; }
+  .go { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+  .go small { color: var(--muted); text-align: center; }
+  .err { color: var(--pink-soft); background: rgba(255, 61, 154, .1); border: 2px solid var(--pink); border-radius: 14px; padding: 12px 14px; margin: 16px 0 0; }
+
+  .history { margin-top: 44px; }
+  .history h2 { font-size: 22px; margin: 0 0 14px; }
+  .history ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .history button {
+    width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; font: inherit; color: var(--text);
+    background: var(--ink-2); border: 2px solid var(--line); border-radius: 18px; padding: 10px; cursor: pointer;
+    box-shadow: 4px 4px 0 var(--pink);
+  }
+  .history img { width: 88px; height: 56px; object-fit: cover; border-radius: 10px; flex: none; background: var(--ink-3); }
+  .history .meta { display: flex; flex-direction: column; min-width: 0; }
+  .history .meta b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .history .meta span { color: var(--muted); font-size: 14px; }
+  .history .pts { margin-left: auto; color: var(--pink); font-weight: 700; font-size: 20px; padding-right: 8px; }
+
+  /* ---------- Working ---------- */
+  .working { min-height: 60vh; display: grid; place-items: center; text-align: center; }
+  .working svg { width: 140px; height: 88px; animation: flip 1.6s ease-in-out infinite; }
+  .working h2 { font-size: 26px; margin: 18px 0 6px; }
+  .working p { color: var(--muted); margin: 0; min-height: 1.5em; }
+  .bar-wrap { width: min(320px, 80vw); height: 14px; margin: 18px auto 0; background: var(--ink-3); border-radius: 999px; border: 2px solid var(--line); overflow: hidden; }
+  .bar-wrap i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--pink) 0 10px, var(--pink-soft) 10px 20px); transition: width .4s; }
+  @keyframes flip { 0% { transform: rotate(0); } 60%, 100% { transform: rotate(360deg); } }
+
+  /* ---------- Report ---------- */
+  .hero { position: relative; padding: 8px 0; }
+  .kicker { color: var(--pink); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-size: 13px; margin: 0; }
+  .report h1 { font-size: clamp(30px, 6vw, 50px); line-height: 1.08; margin: 8px 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .score-row { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; }
+  .ring {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: conic-gradient(var(--pink) calc(var(--pct) * 1%), var(--ink-3) 0);
+    display: grid; place-items: center; border: 3px solid var(--line); box-shadow: 6px 6px 0 var(--pink-soft);
+  }
+  .ring-inner { width: 150px; height: 150px; border-radius: 50%; background: var(--ink); display: grid; place-content: center; text-align: center; border: 3px solid var(--line); }
+  .ring-inner b { font-size: 58px; line-height: 1; color: var(--pink); }
+  .ring-inner small { color: var(--muted); }
+  .headline h2 { margin: 0 0 8px; font-size: 24px; }
+  .headline p { margin: 0 0 8px; }
+  .ded { color: var(--pink-soft); margin-bottom: 0 !important; }
+  section { margin-top: 44px; }
+  .sec { display: flex; align-items: center; gap: 10px; font-size: 26px; margin: 0 0 18px; }
+  .mini { width: 40px; height: 26px; flex: none; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .win h3 { margin: 6px 0 4px; color: var(--pink); }
+  .win p { margin: 0; color: var(--muted); }
+  .emoji { font-size: 30px; }
+  .focus .big { background: var(--pink); color: var(--ink); box-shadow: 8px 8px 0 var(--text); padding: 28px; }
+  .focus .tag { display: inline-block; background: var(--ink); color: var(--pink); border-radius: 999px; padding: 4px 14px; font-weight: 600; margin: 0; }
+  .focus h2 { font-size: clamp(30px, 6vw, 44px); margin: 10px 0 8px; }
+  .focus p { margin: 0 0 12px; font-size: 17px; }
+  .drills { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+  .drill { background: var(--ink); color: var(--text); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .drill b { color: var(--pink); }
+  .drill span { color: var(--muted); }
+  .next { background: rgba(0, 0, 0, .12); border-radius: 14px; padding: 12px 14px; margin: 0 !important; }
+  .bars { display: flex; flex-direction: column; gap: 16px; }
+  .bar { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 36px; gap: 16px; align-items: center; }
+  .lbl { display: flex; flex-direction: column; min-width: 0; }
+  .lbl span { color: var(--muted); font-size: 14px; }
+  .track { height: 18px; background: var(--ink-3); border-radius: 999px; border: 2px solid var(--line); overflow: hidden; }
+  .track i { display: block; height: 100%; background: repeating-linear-gradient(45deg, var(--pink) 0 10px, var(--pink-soft) 10px 20px); border-radius: 999px; }
+  .bar em { font-style: normal; font-weight: 700; font-size: 22px; color: var(--pink); text-align: right; }
+  .frames { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .frames figure { margin: 0; padding: 10px; }
+  .frames img { width: 100%; display: block; border-radius: 14px; border: 2px solid var(--line); background: var(--ink-3); }
+  .frames figcaption { padding: 10px 4px 2px; color: var(--muted); font-size: 14px; display: flex; flex-direction: column; gap: 2px; }
+  .frames figcaption b { color: var(--pink); font-size: 15px; }
+  .timeline { padding: 8px 20px; }
+  .timeline div { display: grid; grid-template-columns: 64px 150px 1fr; gap: 12px; padding: 10px 0; border-bottom: 2px dashed var(--ink-3); }
+  .timeline div:last-child { border-bottom: 0; }
+  .timeline .t { color: var(--pink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .timeline span:last-child { color: var(--muted); }
+  .ded-table { display: flex; flex-direction: column; padding: 8px 20px; }
+  .ded-table div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 2px dashed var(--ink-3); }
+  .ded-table div b { color: var(--pink); white-space: nowrap; }
+  .ded-table .total { border-bottom: 0; font-size: 19px; font-weight: 600; }
+  .fine { color: var(--muted); font-size: 14px; margin-top: 16px; }
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 44px; }
+  footer { text-align: center; color: var(--muted); margin-top: 48px; font-size: 14px; }
+  footer svg { width: 36px; height: 23px; vertical-align: middle; }
+
+  @media (max-width: 760px) {
+    .score-row { grid-template-columns: 1fr; justify-items: center; }
+    .grid3, .frames, .drills, .fields { grid-template-columns: 1fr; }
+    .bar { grid-template-columns: 1fr 36px; gap: 8px 12px; }
+    .bar .lbl { grid-column: 1 / -1; }
+    .timeline div { grid-template-columns: 56px 1fr; }
+    .timeline span:last-child { grid-column: 1 / -1; }
+  }
+  @media print {
+    body { background: #fff; color: #000; }
+    .topbar, .actions, .history { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<svg class="sym" aria-hidden="true">
+  <symbol id="bow" viewBox="0 0 64 40">
+    <path d="M32 20C22 6 6 2 4 10s2 22 10 24 14-6 18-14z" fill="#ff3d9a" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M32 20C42 6 58 2 60 10s-2 22-10 24-14-6-18-14z" fill="#ff3d9a" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M12 14c3 1 6 4 8 7M52 14c-3 1-6 4-8 7" stroke="#ff85c0" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="32" cy="20" r="7" fill="#ff85c0" stroke="#000" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<main>
+  <div class="topbar">
+    <button class="brand" id="home" type="button"><svg><use href="#bow"/></svg><span class="word">Tymble<span>Time</span></span></button>
+    <a class="out" href="/logout">Log out</a>
+  </div>
+
+  <!-- ============ Upload ============ -->
+  <div id="upload">
+    <div class="intro">
+      <h1>Let's see that <span>skill!</span></h1>
+      <p>Pick a video and the TymbleTime coach will score it on 8 things great coaches look for, then give you the #1 fix and drills. Your video stays on your phone. Only a few still frames get sent to the coach.</p>
+    </div>
+
+    <div class="card">
+      <label class="drop" id="drop">
+        <span class="big">🎥</span>
+        <b>Choose a video</b>
+        <small>Best: filmed from the side, at her height, with the whole skill in the frame</small>
+        <input type="file" id="file" accept="video/*">
+      </label>
+
+      <div id="setup" hidden>
+        <div class="step">
+          <h2><span class="num">1</span> Trim to the skill</h2>
+          <p class="hint">Slide Start to just before the run or takeoff, and End to just after the landing. A tighter trim gives more frames of the actual skill.</p>
+          <video class="preview" id="preview" playsinline muted controls></video>
+          <div class="trim">
+            <label>Start <input type="range" id="start" min="0" step="0.05" value="0"><output id="startOut">0.0 s</output></label>
+            <label>End <input type="range" id="end" min="0" step="0.05" value="0"><output id="endOut">0.0 s</output></label>
+          </div>
+        </div>
+
+        <div class="step">
+          <h2><span class="num">2</span> A little about it</h2>
+          <p class="hint">All optional, but it helps the coach score for the right level.</p>
+          <div class="fields">
+            <label>Gymnast's first name
+              <input id="name" maxlength="30" placeholder="e.g. Ava" autocomplete="off">
+            </label>
+            <label>Level
+              <select id="level">
+                <option value="">Not sure</option>
+                <option>Recreational</option>
+                <option>Xcel Bronze</option><option>Xcel Silver</option><option>Xcel Gold</option>
+                <option>Xcel Platinum</option><option>Xcel Diamond</option><option>Xcel Sapphire</option>
+                <option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option>
+                <option>Level 6</option><option>Level 7</option><option>Level 8</option><option>Level 9</option><option>Level 10</option>
+                <option>Elite</option>
+              </select>
+            </label>
+            <label>Event
+              <select id="event">
+                <option value="">Not sure</option>
+                <option>Floor</option><option>Beam</option><option>Bars</option><option>Vault</option>
+                <option>Tumbling (cheer / trampoline &amp; tumbling)</option>
+              </select>
+            </label>
+            <div class="full">
+              <label style="margin-bottom:6px">Who's reading the review?</label>
+              <div class="seg" role="radiogroup" aria-label="Who's reading the review?">
+                <label><input type="radio" name="aud" value="gymnast" checked><span>The gymnast 🤸‍♀️</span></label>
+                <label><input type="radio" name="aud" value="parent"><span>A parent 💕</span></label>
+                <label><input type="radio" name="aud" value="coach"><span>A coach 📋</span></label>
+              </div>
+            </div>
+            <label class="full">Anything the coach should know?
+              <textarea id="notes" maxlength="300" placeholder="e.g. Working on her back handspring, she's been landing short"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <div class="go">
+          <button class="btn" id="goBtn" type="button">Coach me! 🎀</button>
+          <small>Takes about 1–2 minutes</small>
+        </div>
+      </div>
+      <p class="err" id="err" role="alert" hidden></p>
+    </div>
+
+    <div class="history" id="history" hidden>
+      <h2>Past reviews 🎀</h2>
+      <ul id="historyList"></ul>
+    </div>
+  </div>
+
+  <!-- ============ Working ============ -->
+  <div class="working" id="working" hidden>
+    <div>
+      <svg><use href="#bow"/></svg>
+      <h2 id="workTitle">Grabbing frames…</h2>
+      <p id="workMsg">Warming up 🤸‍♀️</p>
+      <div class="bar-wrap"><i id="workBar"></i></div>
+    </div>
+  </div>
+
+  <!-- ============ Report ============ -->
+  <div class="report" id="report" hidden></div>
+
+  <footer><svg><use href="#bow"/></svg> TymbleTime · built with love for superstars</footer>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const fmt = (t) => `${t.toFixed(1)} s`;
+  const views = ["upload", "working", "report"];
+  const show = (v) => { views.forEach((x) => ($(x).hidden = x !== v)); window.scrollTo(0, 0); };
+
+  let file = null, url = null, duration = 0;
+
+  /* ---------- Pick + trim ---------- */
+  const video = $("preview");
+  $("file").addEventListener("change", (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    file = f;
+    if (url) URL.revokeObjectURL(url);
+    url = URL.createObjectURL(f);
+    hideErr();
+    video.src = url;
+    video.load();
+  });
+  video.addEventListener("loadedmetadata", () => {
+    duration = video.duration;
+    if (!isFinite(duration) || duration <= 0) return fail("Hmm, I couldn't read that video. Try Safari, or export it as an MP4.");
+    if (duration > 120) return fail("That video is a bit long. Please trim it to under 2 minutes in your Photos app first.");
+    for (const id of ["start", "end"]) $(id).max = duration.toFixed(2);
+    $("start").value = 0;
+    $("end").value = duration.toFixed(2);
+    syncTrim();
+    $("setup").hidden = false;
+    $("drop").querySelector("b").textContent = "Choose a different video";
+    $("setup").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  video.addEventListener("error", () => fail("Hmm, this browser can't play that video. Try Safari on your iPhone, or export it as an MP4."));
+  function syncTrim(which) {
+    let s = +$("start").value, e = +$("end").value;
+    if (e - s < 0.5) {
+      if (which === "start") s = Math.max(0, e - 0.5); else e = Math.min(duration, s + 0.5);
+      $("start").value = s; $("end").value = e;
+    }
+    $("startOut").textContent = fmt(s);
+    $("endOut").textContent = fmt(e);
+  }
+  for (const id of ["start", "end"]) {
+    $(id).addEventListener("input", () => { syncTrim(id); video.pause(); video.currentTime = +$(id).value; });
+  }
+
+  function fail(msg) { $("err").textContent = msg; $("err").hidden = false; }
+  function hideErr() { $("err").hidden = true; }
+
+  /* ---------- Frame extraction (in the browser) ---------- */
+  function seek(v, t) {
+    return new Promise((resolve, reject) => {
+      const done = () => { v.removeEventListener("seeked", done); clearTimeout(timer); resolve(); };
+      const timer = setTimeout(() => { v.removeEventListener("seeked", done); reject(new Error("seek timeout")); }, 8000);
+      v.addEventListener("seeked", done);
+      v.currentTime = t;
+    });
+  }
+  // Finds black bars (e.g. a screen recording of a landscape video) so the coach sees only the picture.
+  function contentBox(v) {
+    const w = 160, h = Math.round((v.videoHeight / v.videoWidth) * 160);
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    const g = c.getContext("2d", { willReadFrequently: true });
+    g.drawImage(v, 0, 0, w, h);
+    const px = g.getImageData(0, 0, w, h).data;
+    const lum = (x, y) => { const i = (y * w + x) * 4; return 0.3 * px[i] + 0.59 * px[i + 1] + 0.11 * px[i + 2]; };
+    const rowOn = (y) => { let s = 0; for (let x = 0; x < w; x++) s += lum(x, y); return s / w > 18; };
+    const colOn = (x) => { let s = 0; for (let y = 0; y < h; y++) s += lum(x, y); return s / h > 18; };
+    let top = 0, bot = h - 1, left = 0, right = w - 1;
+    while (top < bot && !rowOn(top)) top++;
+    while (bot > top && !rowOn(bot)) bot--;
+    while (left < right && !colOn(left)) left++;
+    while (right > left && !colOn(right)) right--;
+    const sx = v.videoWidth / w, sy = v.videoHeight / h;
+    const box = { x: left * sx, y: top * sy, w: (right - left + 1) * sx, h: (bot - top + 1) * sy };
+    const full = box.w * box.h > 0.9 * v.videoWidth * v.videoHeight;
+    const tiny = box.w < v.videoWidth * 0.2 || box.h < v.videoHeight * 0.1;
+    return full || tiny ? { x: 0, y: 0, w: v.videoWidth, h: v.videoHeight } : box;
+  }
+  async function grabFrames(start, end, onProgress) {
+    const v = document.createElement("video");
+    v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = url;
+    await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error("load")); v.load(); });
+    const span = end - start;
+    const n = Math.max(8, Math.min(24, Math.round(span * 6)));
+    const times = Array.from({ length: n }, (_, i) => start + (span * (i + 0.5)) / n);
+    await seek(v, times[Math.floor(n / 2)]);
+    const box = contentBox(v);
+    const scale = Math.min(1, 1024 / box.w, 768 / box.h);
+    const c = document.createElement("canvas");
+    c.width = Math.round(box.w * scale); c.height = Math.round(box.h * scale);
+    const g = c.getContext("2d");
+    const frames = [];
+    for (let i = 0; i < n; i++) {
+      await seek(v, times[i]);
+      g.drawImage(v, box.x, box.y, box.w, box.h, 0, 0, c.width, c.height);
+      const dataUrl = c.toDataURL("image/jpeg", 0.82);
+      frames.push({ t: times[i], dataUrl, data: dataUrl.split(",")[1] });
+      onProgress((i + 1) / n);
+    }
+    v.removeAttribute("src"); v.load();
+    return frames;
+  }
+  function thumb(dataUrl, width = 480) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        width = Math.min(width, img.width);
+        c.width = width; c.height = Math.round((img.height / img.width) * width);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL("image/jpeg", 0.72));
+      };
+      img.onerror = () => resolve("");
+      img.src = dataUrl;
+    });
+  }
+
+  /* ---------- Run a review ---------- */
+  const MESSAGES = [
+    "Watching the run and hurdle 🏃‍♀️", "Checking those pointed toes 🩰", "Measuring the height ✨",
+    "Looking at the landing 🎯", "Counting the wobbles (if any!) 🤭", "Tying a bow on it 🎀",
+    "Asking the judges' panel 🧑‍⚖️", "Finding the #1 fix 💡", "Picking the best drills 💪", "Almost there, superstar 🌟",
+  ];
+  let msgTimer = null;
+  function working(title, pct) {
+    $("workTitle").textContent = title;
+    $("workBar").style.width = `${Math.round(pct * 100)}%`;
+  }
+
+  $("goBtn").addEventListener("click", async () => {
+    if (!file) return;
+    hideErr();
+    const start = +$("start").value, end = +$("end").value;
+    show("working");
+    working("Grabbing frames…", 0);
+    let frames;
+    try {
+      frames = await grabFrames(start, end, (p) => working("Grabbing frames…", p * 0.25));
+    } catch (_) {
+      show("upload");
+      return fail("I couldn't pull frames from this video. Try Safari, or export it as an MP4.");
+    }
+
+    working("Coach is watching…", 0.3);
+    let m = 0, pct = 0.3;
+    $("workMsg").textContent = MESSAGES[0];
+    msgTimer = setInterval(() => {
+      m = (m + 1) % MESSAGES.length;
+      $("workMsg").textContent = MESSAGES[m];
+      pct = Math.min(0.95, pct + 0.05);
+      $("workBar").style.width = `${Math.round(pct * 100)}%`;
+    }, 5000);
+
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          frames: frames.map(({ t, data }) => ({ t, data })),
+          start, end,
+          name: $("name").value.trim(),
+          level: $("level").value,
+          event: $("event").value,
+          audience: document.querySelector("input[name=aud]:checked").value,
+          notes: $("notes").value.trim(),
+        }),
+      });
+      if (res.status === 401) { location.href = "/"; return; }
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "The coach had a hiccup. Please try again.");
+
+      const review = body.review;
+      const frameImgs = {};
+      for (const k of review.key_frames) {
+        if (frames[k.frame_index]) frameImgs[k.frame_index] = await thumb(frames[k.frame_index].dataUrl, 720);
+      }
+      const entry = { id: Date.now(), date: new Date().toISOString(), name: $("name").value.trim(), review, frames: frameImgs };
+      save(entry);
+      renderReport(entry);
+    } catch (e) {
+      show("upload");
+      fail(e.message || "The coach had a hiccup. Please try again.");
+    } finally {
+      clearInterval(msgTimer);
+    }
+  });
+
+  /* ---------- Saved reviews (this device only) ---------- */
+  const KEY = "tt-reviews";
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (_) { return []; } }
+  function save(entry) {
+    let list = [entry, ...load()].slice(0, 15);
+    while (list.length) {
+      try { localStorage.setItem(KEY, JSON.stringify(list)); break; } catch (_) { list = list.slice(0, -1); }
+    }
+    renderHistory();
+  }
+  const total = (r) => r.scores.reduce((s, x) => s + (Number(x.score) || 0), 0);
+  function renderHistory() {
+    const list = load();
+    $("history").hidden = !list.length;
+    $("historyList").innerHTML = list.map((e) => {
+      const first = e.review.key_frames.map((k) => e.frames[k.frame_index]).find(Boolean) || "";
+      const d = new Date(e.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      return `<li><button type="button" data-id="${e.id}">
+        ${first ? `<img src="${first}" alt="">` : `<img alt="">`}
+        <span class="meta"><b>${esc(e.review.skill_summary)}</b><span>${esc(e.name ? e.name + " · " : "")}${esc(d)}</span></span>
+        <span class="pts">${total(e.review)}</span>
+      </button></li>`;
+    }).join("");
+  }
+  $("historyList").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button[data-id]");
+    if (!b) return;
+    const e = load().find((x) => String(x.id) === b.dataset.id);
+    if (e) renderReport(e);
+  });
+
+  /* ---------- Report ---------- */
+  function renderReport(entry) {
+    const r = entry.review;
+    const max = r.scores.length * 10 || 80;
+    const sum = total(r);
+    const d = new Date(entry.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+    const bow = `<svg class="mini"><use href="#bow"/></svg>`;
+    let html = "";
+
+    if (!r.is_gymnastics) {
+      html = `<header class="hero"><p class="kicker">TymbleTime · Coach's Review · ${esc(d)}</p>
+        <h1>Hmm, I couldn't find the gymnastics 🤔</h1>
+        <div class="card"><p>${esc(r.overall_message)}</p><p class="fine">${esc(r.camera_notes)}</p></div></header>`;
+    } else {
+      html += `<header class="hero">
+        <p class="kicker">TymbleTime · Coach's Review · ${esc(d)}</p>
+        <h1>${esc(r.skill_summary)}</h1>
+        <p class="sub">${esc(r.event)} · ${esc(r.level_guess)}${entry.name ? " · " + esc(entry.name) : ""}</p>
+        <div class="score-row">
+          <div class="ring" style="--pct:${((sum / max) * 100).toFixed(2)}"><div class="ring-inner"><b>${sum}</b><small>out of ${max}</small></div></div>
+          <div class="headline card"><h2>${esc(r.overall_headline)}</h2><p>${esc(r.overall_message)}</p>
+            <p class="ded">Estimated points off for form: <b>${esc(r.deduction_total)}</b></p></div>
+        </div></header>`;
+
+      html += `<section><h2 class="sec">${bow} What went great</h2><div class="grid3">${r.wins.map((w) =>
+        `<div class="card win"><span class="emoji">${esc(w.emoji)}</span><h3>${esc(w.title)}</h3><p>${esc(w.detail)}</p></div>`).join("")}</div></section>`;
+
+      const f = r.top_fix;
+      html += `<section class="focus"><div class="card big">
+        <p class="tag">#1 thing to work on</p><h2>“${esc(f.cue)}”</h2>
+        <p>${esc(f.problem)}</p><p>${esc(f.goal)}</p>
+        <div class="drills">${f.drills.map((dr, i) => `<div class="drill"><b>Drill ${i + 1} · ${esc(dr.name)}</b><span>${esc(dr.how)}</span></div>`).join("")}</div>
+        <p class="next"><b>Next up, after that:</b> ${esc(r.next_fix)}</p></div></section>`;
+
+      html += `<section><h2 class="sec">${bow} Scorecard</h2><div class="card bars">${r.scores.map((s) => {
+        const v = Math.max(0, Math.min(10, Number(s.score) || 0));
+        return `<div class="bar"><div class="lbl"><b>${esc(s.dimension)}</b><span>${esc(s.note)}</span></div>
+          <div class="track"><i style="width:${v * 10}%"></i></div><em>${v}</em></div>`;
+      }).join("")}</div></section>`;
+
+      const kf = r.key_frames.filter((k) => entry.frames[k.frame_index]);
+      if (kf.length) {
+        html += `<section><h2 class="sec">${bow} Frame by frame</h2><div class="frames">${kf.map((k) =>
+          `<figure class="card"><img src="${entry.frames[k.frame_index]}" alt="${esc(k.title)}"><figcaption><b>${esc(k.title)}</b>${esc(k.caption)}</figcaption></figure>`).join("")}</div></section>`;
+      }
+
+      if (r.timeline.length) {
+        html += `<section><h2 class="sec">${bow} Timeline</h2><div class="card timeline">${r.timeline.map((t) =>
+          `<div><span class="t">${Number(t.time_s).toFixed(1)} s</span><b>${esc(t.phase)}</b><span>${esc(t.note)}</span></div>`).join("")}</div></section>`;
+      }
+
+      html += `<section><h2 class="sec">${bow} Where the points go</h2><div class="card ded-table">${r.deductions.map((x) =>
+        `<div><span>${esc(x.item)}</span><b>${esc(x.amount)}</b></div>`).join("")}
+        <div class="total"><span>Estimated total</span><b>${esc(r.deduction_total)}</b></div></div>
+        <p class="fine">Coaching estimates only, not an official score. ${esc(r.camera_notes)}</p></section>`;
+    }
+
+    html += `<div class="actions"><button class="btn" type="button" id="again">Review another video 🎀</button>
+      <button class="btn ghost" type="button" id="print">Print / save PDF</button></div>`;
+    $("report").innerHTML = html;
+    $("again").onclick = () => { show("upload"); };
+    $("print").onclick = () => window.print();
+    show("report");
+  }
+
+  $("home").onclick = () => show("upload");
+  renderHistory();
+})();
+</script>
+</body>
+</html>
