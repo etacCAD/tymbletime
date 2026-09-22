@@ -1,0 +1,8 @@
+# Everything readable stays local. Only the encrypted index.html is published.
+private/
+reviews/
+*.mov
+*.mp4
+COACHING_FRAMEWORK.md
+.claude/
+.DS_Store

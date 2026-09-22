@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>TymbleTime Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'%3E%3Cpath d='M32 20C22 6 6 2 4 10s2 22 10 24 14-6 18-14z' fill='%23ff3d9a' stroke='%23000' stroke-width='3'/%3E%3Cpath d='M32 20C42 6 58 2 60 10s-2 22-10 24-14-6-18-14z' fill='%23ff3d9a' stroke='%23000' stroke-width='3'/%3E%3Ccircle cx='32' cy='20' r='7' fill='%23ff85c0' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --pink: #ff3d9a;
+    --pink-soft: #ff85c0;
+    --blush: #ffd6ea;
+    --ink: #0b0b0d;
+    --ink-2: #17151a;
+    --ink-3: #242027;
+    --text: #fff5fa;
+    --muted: #d9b8c9;
+    --line: #000;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background-color: var(--ink);
+    background-image: radial-gradient(rgba(255, 61, 154, .16) 2.5px, transparent 3px);
+    background-size: 28px 28px;
+    color: var(--text);
+    font-family: "Fredoka", ui-rounded, "Segoe UI", system-ui, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  svg.sym { position: absolute; width: 0; height: 0; }
+  b { font-weight: 600; }
+
+  /* ---------- Gate ---------- */
+  .gate { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
+  .gate-card {
+    width: 100%; max-width: 380px; text-align: center;
+    background: var(--ink-2); border: 3px solid var(--pink); border-radius: 28px;
+    padding: 36px 24px 28px; box-shadow: 8px 8px 0 var(--pink);
+  }
+  .gate-card .bow { width: 110px; height: 70px; margin: -8px auto 8px; display: block; animation: wiggle 3s ease-in-out infinite; }
+  .gate-card h1 { font-size: 30px; margin: 0; letter-spacing: .5px; }
+  .gate-card h1 span { color: var(--pink); }
+  .gate-card p { color: var(--muted); margin: 6px 0 22px; }
+  .gate form { display: flex; flex-direction: column; gap: 12px; }
+  .gate input {
+    font: inherit; font-size: 18px; text-align: center; padding: 14px 16px;
+    border-radius: 999px; border: 3px solid var(--pink-soft); background: var(--ink);
+    color: var(--text); outline: none;
+  }
+  .gate input:focus { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(255, 61, 154, .3); }
+  .gate button {
+    font: inherit; font-size: 18px; font-weight: 600; padding: 14px; cursor: pointer;
+    border-radius: 999px; border: 3px solid var(--line); background: var(--pink); color: var(--ink);
+    box-shadow: 4px 4px 0 var(--pink-soft); transition: transform .1s;
+  }
+  .gate button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--pink-soft); }
+  .gate .err { color: var(--pink-soft); min-height: 1.5em; margin: 12px 0 0; font-size: 15px; }
+  .shake { animation: shake .4s; }
+  @keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+  @keyframes wiggle { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+  @keyframes floaty { 0%, 100% { transform: translateY(0) rotate(-10deg); } 50% { transform: translateY(-10px) rotate(8deg); } }
+
+  /* ---------- Report ---------- */
+  main { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
+  .hero { position: relative; padding: 16px 0 8px; }
+  .bow-float { position: absolute; width: 70px; height: 44px; animation: floaty 4s ease-in-out infinite; }
+  .bow-float svg { width: 100%; height: 100%; }
+  .b1 { right: 0; top: 0; }
+  .b2 { right: 90px; top: 50px; width: 42px; height: 27px; animation-delay: -2s; }
+  .kicker { color: var(--pink); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-size: 13px; margin: 0; }
+  h1 { font-size: clamp(30px, 6vw, 50px); line-height: 1.08; margin: 8px 0 6px; max-width: 80%; }
+  h1 span { color: var(--pink); }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .card {
+    background: var(--ink-2); border: 3px solid var(--line); border-radius: 22px;
+    box-shadow: 6px 6px 0 var(--pink); padding: 20px;
+  }
+  .score-row { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; }
+  .ring {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: conic-gradient(var(--pink) calc(var(--pct) * 1%), var(--ink-3) 0);
+    display: grid; place-items: center; border: 3px solid var(--line); box-shadow: 6px 6px 0 var(--pink-soft);
+  }
+  .ring-inner { width: 150px; height: 150px; border-radius: 50%; background: var(--ink); display: grid; place-content: center; text-align: center; border: 3px solid var(--line); }
+  .ring-inner b { font-size: 58px; line-height: 1; color: var(--pink); }
+  .ring-inner small { color: var(--muted); }
+  .headline h2 { margin: 0 0 8px; font-size: 24px; }
+  .headline p { margin: 0 0 8px; }
+  .ded { color: var(--pink-soft); margin-bottom: 0 !important; }
+
+  section { margin-top: 44px; }
+  .sec { display: flex; align-items: center; gap: 10px; font-size: 26px; margin: 0 0 18px; }
+  .mini { width: 40px; height: 26px; flex: none; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .win h3 { margin: 6px 0 4px; color: var(--pink); }
+  .win p { margin: 0; color: var(--muted); }
+  .emoji { font-size: 30px; }
+
+  .focus .big { background: var(--pink); color: var(--ink); box-shadow: 8px 8px 0 var(--text); padding: 28px; }
+  .focus .tag { display: inline-block; background: var(--ink); color: var(--pink); border-radius: 999px; padding: 4px 14px; font-weight: 600; margin: 0; }
+  .focus h2 { font-size: clamp(30px, 6vw, 44px); margin: 10px 0 8px; }
+  .focus p { margin: 0 0 12px; font-size: 17px; }
+  .drills { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+  .drill { background: var(--ink); color: var(--text); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .drill b { color: var(--pink); }
+  .drill span { color: var(--muted); }
+  .next { background: rgba(0, 0, 0, .12); border-radius: 14px; padding: 12px 14px; margin: 0 !important; }
+
+  .bars { display: flex; flex-direction: column; gap: 16px; }
+  .bar { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 36px; gap: 16px; align-items: center; }
+  .lbl { display: flex; flex-direction: column; min-width: 0; }
+  .lbl span { color: var(--muted); font-size: 14px; }
+  .track { height: 18px; background: var(--ink-3); border-radius: 999px; border: 2px solid var(--line); overflow: hidden; }
+  .track i { display: block; height: 100%; background: repeating-linear-gradient(45deg, var(--pink) 0 10px, var(--pink-soft) 10px 20px); border-radius: 999px; }
+  .bar em { font-style: normal; font-weight: 700; font-size: 22px; color: var(--pink); text-align: right; }
+
+  .frames { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .frames figure { margin: 0; padding: 10px; }
+  .frames img { width: 100%; display: block; border-radius: 14px; border: 2px solid var(--line); aspect-ratio: 888 / 380; object-fit: cover; }
+  .frames figcaption { padding: 10px 4px 2px; color: var(--muted); font-size: 14px; display: flex; flex-direction: column; gap: 2px; }
+  .frames figcaption b { color: var(--pink); font-size: 15px; }
+
+  .ded-table { display: flex; flex-direction: column; padding: 8px 20px; }
+  .ded-table div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 2px dashed var(--ink-3); }
+  .ded-table div b { color: var(--pink); white-space: nowrap; }
+  .ded-table .total { border-bottom: 0; font-size: 19px; font-weight: 600; }
+  .fine { color: var(--muted); font-size: 14px; margin-top: 16px; }
+  footer { text-align: center; color: var(--muted); margin-top: 48px; font-size: 14px; }
+  footer svg { width: 36px; height: 23px; vertical-align: middle; }
+
+  @media (max-width: 760px) {
+    .score-row { grid-template-columns: 1fr; justify-items: center; }
+    .grid3, .frames, .drills { grid-template-columns: 1fr; }
+    .bar { grid-template-columns: 1fr 36px; gap: 8px 12px; }
+    .bar .lbl { grid-column: 1 / -1; }
+    h1 { max-width: 100%; }
+    .bow-float { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+<svg class="sym" aria-hidden="true">
+  <symbol id="bow" viewBox="0 0 64 40">
+    <path d="M32 20C22 6 6 2 4 10s2 22 10 24 14-6 18-14z" fill="#ff3d9a" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M32 20C42 6 58 2 60 10s-2 22-10 24-14-6-18-14z" fill="#ff3d9a" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M12 14c3 1 6 4 8 7M52 14c-3 1-6 4-8 7" stroke="#ff85c0" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="32" cy="20" r="7" fill="#ff85c0" stroke="#000" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<div class="gate" id="gate">
+  <div class="gate-card" id="gateCard">
+    <svg class="bow"><use href="#bow"/></svg>
+    <h1>Tymble<span>Time</span></h1>
+    <p>A special coach's review for a superstar ✨</p>
+    <form id="gateForm" autocomplete="off">
+      <input id="pw" type="password" placeholder="Secret password" aria-label="Password" autofocus>
+      <button type="submit" id="go">Let's go! 🎀</button>
+    </form>
+    <p class="err" id="err" role="alert"></p>
+  </div>
+</div>
+
+<main id="app" hidden></main>
+
+<script>
+  const PAYLOAD = /*PAYLOAD*/null;
+
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+  async function unlock(password) {
+    const enc = new TextEncoder();
+    const base = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt: b64(PAYLOAD.salt), iterations: PAYLOAD.iter, hash: "SHA-256" },
+      base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
+    );
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(PAYLOAD.iv) }, key, b64(PAYLOAD.data));
+    return new TextDecoder().decode(plain);
+  }
+
+  function show(html) {
+    const app = document.getElementById("app");
+    app.innerHTML = html + '<footer><svg><use href="#bow"/></svg> TymbleTime · built with love for a superstar</footer>';
+    app.hidden = false;
+    document.getElementById("gate").remove();
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("gateForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const pw = document.getElementById("pw").value;
+    const err = document.getElementById("err");
+    const btn = document.getElementById("go");
+    btn.disabled = true; btn.textContent = "Checking… 🎀"; err.textContent = "";
+    try {
+      const html = await unlock(pw);
+      try { sessionStorage.setItem("tt-pw", pw); } catch (_) {}
+      show(html);
+    } catch (_) {
+      err.textContent = "Oops! That's not it. Try again 💕";
+      const card = document.getElementById("gateCard");
+      card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+      btn.disabled = false; btn.textContent = "Let's go! 🎀";
+    }
+  });
+
+  (async () => {
+    let saved = null;
+    try { saved = sessionStorage.getItem("tt-pw"); } catch (_) {}
+    if (saved) { try { show(await unlock(saved)); } catch (_) {} }
+  })();
+</script>
+</body>
+</html>
